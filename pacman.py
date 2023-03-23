@@ -134,12 +134,40 @@ def move():
         if valid(point + course):
             point.move(course)
         else:
-            options = [
-                vector(5, 0),
-                vector(-5, 0),
-                vector(0, 5),
-                vector(0, -5),
-            ]
+            # El fantasma chocó, por lo que se debe
+            # checar dónde está pacman con respecto a mí 
+            # (fantasma) para solamente ofrecer choices
+            # que me acerquen al pacman.
+            
+            if point.x > pacman.x and point.y > pacman.y:
+                options = [
+                    vector(-5, 0),
+                    vector(0, -5)
+                ]
+            elif point.x > pacman.x and point.y < pacman.y:
+                options = [
+                    vector(-5, 0),
+                    vector(0, 5)
+                ]
+            elif point.x < pacman.x and point.y > pacman.y:
+                options = [
+                    vector(5, 0),
+                    vector(0, -5)
+                ]
+            elif point.x < pacman.x and point.y < pacman.y:
+                options = [
+                    vector(5, 0),
+                    vector(0, 5)
+                ]
+            else:
+                options = [
+                    vector(-5, 0),
+                    vector(0, -5),
+                    vector(5, 0),
+                    vector(0, 5)
+                ]
+
+            
             plan = choice(options)
             course.x = plan.x
             course.y = plan.y
