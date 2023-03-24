@@ -1,17 +1,14 @@
-"""Pacman, classic arcade game.
+# Juego de pacman basado en la colección de FreeGames
+# donde se hicieron modificaciones para una mejor experiencia
+# de juego.
+# Autores: Regina Luna, A01655821
+#          Diego Samperio, A01662935
+#          Abigail Curiel, A01655892
+# Fecha: 23/03/2023
 
-Exercises
-
-1. Change the board.
-2. Change the number of ghosts.
-3. Change where pacman starts.
-4. Make the ghosts faster/slower.
-5. Make the ghosts smarter.
-"""
-
+# Se importan las librerías que se utilizarán.
 from random import choice
 from turtle import *
-
 from freegames import floor, vector
 
 state = {'score': 0}
@@ -19,6 +16,8 @@ path = Turtle(visible=False)
 writer = Turtle(visible=False)
 aim = vector(5, 0)
 pacman = vector(-40, -80)
+
+# Se aumenta la velocidad inicial de los fantasmas.
 ghosts = [
     [vector(-180, 160), vector(5, 0)],
     [vector(-180, -160), vector(0, 5)],
@@ -26,6 +25,8 @@ ghosts = [
     [vector(100, -160), vector(-5, 0)],
 ]
 # fmt: off
+
+# Se cambió la forma del tablero.
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
@@ -50,9 +51,12 @@ tiles = [
 ]
 # fmt: on
 
-
+# Función que dibuja un cuadrado usando el camino
+# En una coordenada particular.
+# Toma como parámetro la coordenada una coordenada
+# de tipo (x,y) donde se dibujará el cuadrado.
+# No hay valor de retorno.
 def square(x, y):
-    """Draw square using path at (x, y)."""
     path.up()
     path.goto(x, y)
     path.down()
@@ -65,16 +69,22 @@ def square(x, y):
     path.end_fill()
 
 
+# Función que da el desplazamiento de un punto
+# o fantasma en las casillas.
+# Toma como parámetro el punto desplazado.
+# Regresa el desplazamiento del punto como índice.
 def offset(point):
-    """Return offset of point in tiles."""
     x = (floor(point.x, 20) + 200) / 20
     y = (180 - floor(point.y, 20)) / 20
     index = int(x + y * 20)
     return index
 
-
+# Función que evalúa si un punto o fantasma es 
+# válido en las casillas.
+# Toma como parámetro el punto a evaluar.
+# Regresa Verdadero si el punto es válido en las
+# casillas. En caso contrario, regresa Falso.
 def valid(point):
-    """Return True if point is valid in tiles."""
     index = offset(point)
 
     if tiles[index] == 0:
@@ -87,9 +97,10 @@ def valid(point):
 
     return point.x % 20 == 0 or point.y % 20 == 0
 
-
+# Función que dibuja el mundo usando un camino.
+# No toma parámetros.
+# No hay valor de retorno.
 def world():
-    """Draw world using path."""
     bgcolor('black')
     path.color('blue')
 
@@ -106,9 +117,11 @@ def world():
                 path.goto(x + 10, y + 10)
                 path.dot(2, 'white')
 
-
+# Función que mueve a pacman y a todos los fantasmas.
+# No toma parámetros.
+# Se regresa un vacío para romper el ciclo
+# y la función.
 def move():
-    """Move pacman and all ghosts."""
     writer.undo()
     writer.write(state['score'])
 
@@ -138,7 +151,6 @@ def move():
             # checar dónde está pacman con respecto a mí 
             # (fantasma) para solamente ofrecer choices
             # que me acerquen al pacman.
-            
             if point.x > pacman.x and point.y > pacman.y:
                 options = [
                     vector(-5, 0),
@@ -167,7 +179,6 @@ def move():
                     vector(0, 5)
                 ]
 
-            
             plan = choice(options)
             course.x = plan.x
             course.y = plan.y
@@ -184,9 +195,12 @@ def move():
 
     ontimer(move, 100)
 
-
+# Función que cambia el objetivo del pacman
+# si es válido.
+# Toma como parámetro las coordinadas de tipo
+# (x,y) a las que se cambiará el objetivo.
+# No hay valor de retorno.
 def change(x, y):
-    """Change pacman aim if valid."""
     if valid(pacman + vector(x, y)):
         aim.x = x
         aim.y = y
