@@ -20,10 +20,10 @@ writer = Turtle(visible=False)
 aim = vector(5, 0)
 pacman = vector(-40, -80)
 ghosts = [
-    [vector(-180, 160), vector(5, 0)],
-    [vector(-180, -160), vector(0, 5)],
-    [vector(100, 160), vector(0, -5)],
-    [vector(100, -160), vector(-5, 0)],
+    [vector(-180, 160), vector(9, 0)],
+    [vector(-180, -160), vector(0, 9)],
+    [vector(100, 160), vector(0, -9)],
+    [vector(100, -160), vector(-9, 0)],
 ]
 # fmt: off
 tiles = [
@@ -167,6 +167,12 @@ def move():
                     vector(0, 5)
                 ]
 
+            options = [
+                vector(9, 0),
+                vector(-9, 0),
+                vector(0, 9),
+                vector(0, -9),
+            ]
             
             plan = choice(options)
             course.x = plan.x
